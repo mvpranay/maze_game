@@ -9,6 +9,7 @@ def generate_maze(size):
             row.append(Cell(row_no, col_no))
         cells.append(row)
     
+    # to store if a particular cell has been visited before
     explored = [[0 for _ in range(size)] for _ in range(size)]
 
     def not_explored(__cell: Cell):
@@ -18,7 +19,6 @@ def generate_maze(size):
         return 0 <= row < size and 0 <= col < size
     
     def explore(__cell: Cell):
-        explored[__cell.row][__cell.col] = 1
         dirs = ["up", "right", "down", "left"]
         shuffle(dirs)
         for chosen_dir in dirs:
@@ -34,7 +34,7 @@ def generate_maze(size):
                 continue
             
             wall_exists = bool(eval(f"__cell.{chosen_dir}"))
-            # if adj cell is valid, then break wall
+            # if adj cell is valid and a wall exists, then break wall
             if not_explored(adj_cell) and wall_exists:
 
                 # break_walls in that direction for that cell and the opposite direction for the adjacent cell
@@ -49,5 +49,6 @@ def generate_maze(size):
                 explore(adj_cell)
         
     start_cell = cells[0][0]
+    explored[0][0] = 1
     explore(start_cell)
     return cells
