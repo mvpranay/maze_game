@@ -12,27 +12,30 @@ def generate_maze(size):
     explored = [[0 for _ in range(size)] for _ in range(size)]
 
     def not_explored(__cell: Cell):
-        return (0 <= __cell.x < size) and (0 <= __cell.y < size) and not explored[__cell.y][__cell.x]
+        return not explored[__cell.row][__cell.col]
     
-    def valid_coords(x,y):
-        return 0 <= x < size and 0 <= y < size
+    def valid_coords(row,col):
+        return 0 <= row < size and 0 <= col < size
     
     def explore(__cell: Cell):
+        explored[__cell.row][__cell.col] = 1
         dirs = ["up", "right", "down", "left"]
         shuffle(dirs)
         for chosen_dir in dirs:
-            vec_dirs = {"up":(0,-1),"down":(0,1),"left":(-1,0),"right":(1,0)}
+            vec_dirs = {"up":(-1,0),"down":(1,0),"left":(0,-1),"right":(0,1)}
             
-            adj_cellx = __cell.x + vec_dirs[chosen_dir][0]
-            adj_celly = __cell.y + vec_dirs[chosen_dir][1]
+            adj_cell_row = __cell.row + vec_dirs[chosen_dir][0]
+            adj_cell_col = __cell.col + vec_dirs[chosen_dir][1]
             
-            if valid_coords(adj_cellx, adj_celly): # if adj_cell has valid coords, initialise and go on
-                adj_cell = cells[adj_celly][adj_cellx]
+            # if adj_cell has valid coords, initialise and go on
+            if valid_coords(adj_cell_row, adj_cell_col): 
+                adj_cell = cells[adj_cell_row][adj_cell_col]
             else: 
                 continue
             
+            wall_exists = bool(eval(f"__cell.{chosen_dir}"))
             # if adj cell is valid, then break wall
-            if not_explored(adj_cell):
+            if not_explored(adj_cell) and wall_exists:
 
                 # break_walls in that direction for that cell and the opposite direction for the adjacent cell
                 opposite_dirs = {"up":"down","down":"up","left":"right","right":"left"}
@@ -41,12 +44,10 @@ def generate_maze(size):
                 eval(f"adj_cell.break_{opposite_dirs[chosen_dir]}_wall()")
 
                 # mark the adjacent cell as explored
-                explored[adj_cell.y][adj_cell.x] = 1
+                explored[adj_cell.row][adj_cell.col] = 1
+                # print(adj_cell.row, adj_cell.col)
                 explore(adj_cell)
         
     start_cell = cells[0][0]
     explore(start_cell)
     return cells
-
-
-generate_maze(10)
