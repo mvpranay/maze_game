@@ -1,5 +1,6 @@
 import pygame
 from maze import generate_maze
+from binary_tree import binary_tree
 from player import Player
 
 pygame.init()
@@ -18,6 +19,7 @@ BLUE = (0, 0, 255)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Game")
 cells = generate_maze(N_CELLS)
+# cells = binary_tree(N_CELLS)
 player = Player(0,0,N_CELLS-1,N_CELLS-1)
 
 def checkValidMove(player: Player, direction, cells):
