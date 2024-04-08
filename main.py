@@ -33,8 +33,8 @@ def display(screen, cells, player):
     screen.fill(BLACK)
 
     # draw the start and end squares
-    pygame.draw.rect(screen, pygame.Color(120,0,0), (0,0,CELL_WIDTH,CELL_WIDTH))
-    pygame.draw.rect(screen, pygame.Color(0,120,0), ((N_CELLS-1)*CELL_WIDTH,(N_CELLS-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH))
+    pygame.draw.rect(screen, pygame.Color(150,0,0), (0,0,CELL_WIDTH,CELL_WIDTH))
+    pygame.draw.rect(screen, pygame.Color(0,150,0), ((N_CELLS-1)*CELL_WIDTH,(N_CELLS-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH))
     
     for row_no in range(N_CELLS):
         for col_no in range(N_CELLS):
