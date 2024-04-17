@@ -1,5 +1,4 @@
 
-
 class Player:
     def __init__(self, start_row, start_col, end_row, end_col):
         self.row = start_row
