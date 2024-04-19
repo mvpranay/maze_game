@@ -9,10 +9,15 @@ pygame.init()
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Game")
+clock = pygame.time.Clock()
+bg_image = pygame.image.load('imgs/possible_background.jpg')
+bg_image = pygame.transform.scale(bg_image, ((N_CELLS + 2*HALF) * PLAYER_VIEW_SIZE,) * 2)
+
 # cells = generate_maze(N_CELLS)    
 # cells = binary_tree(N_CELLS)
 cells = prims(N_CELLS)
-player = Player(0,0,N_CELLS-1,N_CELLS-1)
+
+player = Player()
 
 def checkValidMove(player: Player, direction, cells):
     current_cell = cells[player.row][player.col]
@@ -27,19 +32,52 @@ def display(screen, cells, player):
     def valid_coords(row, col):
         return 0 <= row < N_CELLS and 0 <= col < N_CELLS
     
-    half = (PLAYER_VIEW_CELLS - 1) // 2
-    start_row = (player.row - half)
-    start_col = (player.col - half)
-    # print(f"start row {start_row} start col {start_col}")
-    for row_no in range(start_row, start_row + 2 * half + 1):
-        for col_no in range(start_col, start_col + 2 * half + 1):
+    ADJUSTED_HALF = HALF + 1 # to accomodate newly visible cells while moving
+    start_row = (player.row - ADJUSTED_HALF)
+    start_col = (player.col - ADJUSTED_HALF)
+
+    direction = player.getMovingDirection()
+    move_tick = player.getMoveTick()
+    correction_term = move_tick / 8 * PLAYER_VIEW_SIZE
+
+    bg_x = -(start_col + ADJUSTED_HALF) * PLAYER_VIEW_SIZE
+    bg_y = -(start_row + ADJUSTED_HALF) * PLAYER_VIEW_SIZE
+
+    if direction == "right":
+        bg_x -= correction_term
+    elif direction == "left":
+        bg_x += correction_term
+    elif direction == "up":
+        bg_y += correction_term
+    elif direction == "down":
+        bg_y -= correction_term
+
+    # display the background
+    rect = (bg_x, bg_y, BG_SIZE, BG_SIZE)
+    screen.blit(bg_image, rect)
+    
+    for row_no in range(player.row - ADJUSTED_HALF, player.row + ADJUSTED_HALF + 1):
+        for col_no in range(player.col - ADJUSTED_HALF, player.col + ADJUSTED_HALF + 1):
 
             if valid_coords(row_no, col_no):
+
                 cell = cells[row_no][col_no]
                 cell_y = (row_no - start_row) * PLAYER_VIEW_SIZE
                 cell_x = (col_no - start_col) * PLAYER_VIEW_SIZE
+
+                # adjust correction based on player.move_tick and player.moving_direction
+                if direction == "right":
+                    cell_x -= correction_term
+                elif direction == "left":
+                    cell_x += correction_term
+                elif direction == "up":
+                    cell_y += correction_term
+                elif direction == "down":
+                    cell_y -= correction_term
+                
                 # draw the cell
                 pygame.draw.rect(screen, fill_color, (cell_x, cell_y, PLAYER_VIEW_SIZE, PLAYER_VIEW_SIZE))
+
                 # draw walls
                 if cell.up:
                     rect = (cell_x, cell_y - WALL_THICKNESS // 2, PLAYER_VIEW_SIZE, WALL_THICKNESS)
@@ -69,20 +107,21 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and checkValidMove(player,"up",cells):
+            if event.key == pygame.K_UP and checkValidMove(player,"up",cells) and not player.isMoving():
                 player.move_up()
-            elif event.key == pygame.K_DOWN and checkValidMove(player,"down",cells):
+            elif event.key == pygame.K_DOWN and checkValidMove(player,"down",cells) and not player.isMoving():
                 player.move_down()
-            elif event.key == pygame.K_LEFT and checkValidMove(player,"left",cells):
+            elif event.key == pygame.K_LEFT and checkValidMove(player,"left",cells) and not player.isMoving():
                 player.move_left()
-            elif event.key == pygame.K_RIGHT and checkValidMove(player,"right",cells):
+            elif event.key == pygame.K_RIGHT and checkValidMove(player,"right",cells) and not player.isMoving():
                 player.move_right()
 
     # check game over 
     if player.completed_maze():
         print("Congrats you won!")
         run = False
-
+    player.update()
     display(screen, cells, player)
+    clock.tick(FPS)
 
 pygame.quit()
