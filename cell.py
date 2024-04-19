@@ -10,10 +10,10 @@ class Cell:
         self.down = True
         self.left = True
         # store the wall objects in each direction
-        self.up_sprite = Wall(self.row, self.col, "up")
-        self.down_sprite = Wall(self.row, self.col, "down")
-        self.left_sprite = Wall(self.row, self.col, "left")
-        self.right_sprite = Wall(self.row, self.col, "right")
+        self.up_wall = Wall("up")
+        self.down_wall = Wall("down")
+        self.left_wall = Wall("left")
+        self.right_wall = Wall("right")
 
     def break_up_wall(self):
         self.up = False
