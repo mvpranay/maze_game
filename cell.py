@@ -1,3 +1,5 @@
+from wall import Wall
+
 class Cell:
     def __init__(self,row,col):
         self.row = row
@@ -7,6 +9,11 @@ class Cell:
         self.right = True
         self.down = True
         self.left = True
+        # store the wall objects in each direction
+        self.up_sprite = Wall(self.row, self.col, "up")
+        self.down_sprite = Wall(self.row, self.col, "down")
+        self.left_sprite = Wall(self.row, self.col, "left")
+        self.right_sprite = Wall(self.row, self.col, "right")
 
     def break_up_wall(self):
         self.up = False

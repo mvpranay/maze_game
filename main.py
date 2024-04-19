@@ -3,32 +3,14 @@ from maze import generate_maze
 from binary_tree import binary_tree
 from prims import prims
 from player import Player
+from constants import *
 
 pygame.init()
 
-WIDTH = 900
-HEIGHT = 900
-N_CELLS = 20
-CELL_WIDTH = WIDTH // N_CELLS
-
-BLACK = (50,) * 3
-WHITE = (230,) * 3
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-
-fill_color = (212, 241, 244)#(200, 244, 200)
-end_color = (117, 230, 218)#(135, 180, 167)
-wall_color = (5, 68, 94)#(69, 52, 126)
-player_color = (24, 154, 180 )#(72, 99, 144)
-wall_thickness = 3
-N_STEPS = 10
-STEP = CELL_WIDTH // N_STEPSg
-
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Game")
-cells = generate_maze(N_CELLS)
-# cells = binary_tree(N_CELLS)
+# cells = generate_maze(N_CELLS)
+cells = binary_tree(N_CELLS)
 # cells = prims(N_CELLS)
 player = Player(0,0,N_CELLS-1,N_CELLS-1)
 
@@ -41,34 +23,30 @@ def checkValidMove(player: Player, direction, cells):
 
 def display(screen, cells, player):
 
-    screen.fill(fill_color)
-
-    # draw the start and end squares
-    # pygame.draw.rect(screen, pygame.Color(150,0,0), (0,0,CELL_WIDTH,CELL_WIDTH))
-    pygame.draw.rect(screen, end_color, ((N_CELLS-1)*CELL_WIDTH,(N_CELLS-1)*CELL_WIDTH,CELL_WIDTH,CELL_WIDTH))
+    screen.fill(BLACK)
     
+    # draw cells in range
     for row_no in range(N_CELLS):
         for col_no in range(N_CELLS):
-            cell = cells[row_no][col_no]
-            top_left_x = col_no * CELL_WIDTH
-            top_left_y = row_no * CELL_WIDTH
-            # draw walls
-            if cell.up:
-                pygame.draw.line(screen, wall_color, (top_left_x,top_left_y), (top_left_x+CELL_WIDTH,top_left_y), wall_thickness)
-            if cell.left:
-                pygame.draw.line(screen, wall_color, (top_left_x,top_left_y), (top_left_x,top_left_y+CELL_WIDTH),wall_thickness)
-            if cell.down:
-                pygame.draw.line(screen, wall_color, (top_left_x,top_left_y+CELL_WIDTH), (top_left_x+CELL_WIDTH,top_left_y+CELL_WIDTH),wall_thickness)
-            if cell.right:
-                pygame.draw.line(screen, wall_color, (top_left_x+CELL_WIDTH,top_left_y), (top_left_x+CELL_WIDTH,top_left_y+CELL_WIDTH),wall_thickness)
+            if abs(player.row - row_no) <= 5 and abs(player.col - col_no) <=  5:
+                cell = cells[row_no][col_no]
+                pygame.draw.rect(screen, fill_color, (col_no*CELL_WIDTH,row_no*CELL_WIDTH, CELL_WIDTH, CELL_WIDTH))
+                # draw walls
+                if cell.up:
+                    screen.blit(cell.up_sprite.image, cell.up_sprite.rect)
+                if cell.left:
+                    screen.blit(cell.left_sprite.image, cell.left_sprite.rect)
+                if cell.down:
+                    screen.blit(cell.down_sprite.image, cell.down_sprite.rect)
+                if cell.right:
+                    screen.blit(cell.right_sprite.image, cell.right_sprite.rect)
     
-    # draw the player at the center of the cell
-    PLAYER_RECT_WIDTH = CELL_WIDTH // 3
-    player_x = (player.col + 0.5) * CELL_WIDTH
-    player_y = (player.row + 0.5) * CELL_WIDTH
-    pygame.draw.rect(screen, player_color, (player_x-PLAYER_RECT_WIDTH//2,player_y-PLAYER_RECT_WIDTH//2,PLAYER_RECT_WIDTH,PLAYER_RECT_WIDTH))
+    # draw the player
+    screen.blit(player.image, player.rect)
 
     pygame.display.update()
+
+
 
 run = True
 while run:
@@ -91,4 +69,5 @@ while run:
         run = False
 
     display(screen, cells, player)
+
 pygame.quit()
