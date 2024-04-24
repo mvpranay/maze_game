@@ -37,7 +37,7 @@ def display(screen, cells, player):
 
     direction = player.getMovingDirection()
     move_tick = player.getMoveTick()
-    correction_term = move_tick / 8 * PLAYER_VIEW_SIZE
+    correction_term = move_tick / MAX_MOVE_TICKS * PLAYER_VIEW_SIZE
 
     bg_x = -(start_col + HALF) * PLAYER_VIEW_SIZE
     bg_y = -(start_row + HALF) * PLAYER_VIEW_SIZE

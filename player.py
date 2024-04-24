@@ -1,6 +1,13 @@
 from constants import *
 import pygame
 
+def getImgFromMoveTick(move_tick):
+    cum_sum = 0
+    for img_index in range(1,8):
+        cum_sum += IMG_TICK_DICT[img_index]
+        if move_tick < cum_sum:
+            return img_index
+
 class Player:
     def __init__(self, start_row=0, start_col=0, end_row=N_CELLS-1, end_col=N_CELLS-1):
         self.row = start_row
@@ -26,7 +33,7 @@ class Player:
 
     def update(self):
         if self.moving:
-            if self.move_tick == len(self.imgs):
+            if self.move_tick == MAX_MOVE_TICKS:
                 # animation ends here, based on moving_direction update the coords of the player in the maze
                 if self.moving_direction == "right":
                     self.col += 1
@@ -44,7 +51,7 @@ class Player:
                 return
             
             # animation in progress, set image and increase move_tick
-            self.image = self.imgs[self.move_tick]
+            self.image = self.imgs[getImgFromMoveTick(self.move_tick)]
             self.move_tick += 1
         else:
             self.image = self.imgs[0]
