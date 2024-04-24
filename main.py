@@ -32,16 +32,15 @@ def display(screen, cells, player):
     def valid_coords(row, col):
         return 0 <= row < N_CELLS and 0 <= col < N_CELLS
     
-    ADJUSTED_HALF = HALF + 1 # to accomodate newly visible cells while moving
-    start_row = (player.row - ADJUSTED_HALF)
-    start_col = (player.col - ADJUSTED_HALF)
+    start_row = (player.row - HALF)
+    start_col = (player.col - HALF)
 
     direction = player.getMovingDirection()
     move_tick = player.getMoveTick()
     correction_term = move_tick / 8 * PLAYER_VIEW_SIZE
 
-    bg_x = -(start_col + ADJUSTED_HALF) * PLAYER_VIEW_SIZE
-    bg_y = -(start_row + ADJUSTED_HALF) * PLAYER_VIEW_SIZE
+    bg_x = -(start_col + HALF) * PLAYER_VIEW_SIZE
+    bg_y = -(start_row + HALF) * PLAYER_VIEW_SIZE
 
     if direction == "right":
         bg_x -= correction_term
@@ -55,9 +54,9 @@ def display(screen, cells, player):
     # display the background
     rect = (bg_x, bg_y, BG_SIZE, BG_SIZE)
     screen.blit(bg_image, rect)
-    
-    for row_no in range(player.row - ADJUSTED_HALF, player.row + ADJUSTED_HALF + 1):
-        for col_no in range(player.col - ADJUSTED_HALF, player.col + ADJUSTED_HALF + 1):
+
+    for row_no in range(player.row - HALF - 1, player.row + HALF + 2):
+        for col_no in range(player.col - HALF - 1, player.col + HALF + 2):
 
             if valid_coords(row_no, col_no):
 
@@ -97,7 +96,12 @@ def display(screen, cells, player):
     cell_x = (player.col - start_col) * PLAYER_VIEW_SIZE
     gap = (PLAYER_VIEW_SIZE - PLAYER_SIZE) // 2
     rect = (cell_x + gap, cell_y + gap, PLAYER_SIZE, PLAYER_SIZE)
-    screen.blit(player.image, rect)
+
+    # if player is facing left, display flipped image
+    img = player.image
+    if player.getFacingDirection() == "left":
+        img = pygame.transform.flip(img, True, False)
+    screen.blit(img, rect)
                 
     pygame.display.update()
 

@@ -22,6 +22,8 @@ class Player:
         self.moving_direction = None
         self.move_tick = 0
 
+        self.facing = "right"
+
     def update(self):
         if self.moving:
             if self.move_tick == len(self.imgs):
@@ -56,11 +58,16 @@ class Player:
     def getMovingDirection(self):
         return self.moving_direction
 
+    def getFacingDirection(self):
+        return self.facing
+    
     def move_right(self):
+        self.facing = "right"
         self.moving = True
         self.moving_direction = "right"
 
     def move_left(self):
+        self.facing = "left"
         self.moving = True
         self.moving_direction = "left"
 

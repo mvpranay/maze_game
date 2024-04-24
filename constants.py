@@ -1,7 +1,7 @@
 WIDTH = 900
 HEIGHT = 900
 N_CELLS = 20
-FPS = 7
+FPS = 60
 
 BLACK = (50,) * 3
 WHITE = (230,) * 3
@@ -9,7 +9,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-fill_color = (212, 241, 244)
+fill_color = (125, 84, 9)
 WALL_THICKNESS = 20
 
 PLAYER_VIEW_CELLS = 9
