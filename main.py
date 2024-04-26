@@ -37,7 +37,11 @@ def display(screen, cells, player):
 
     direction = player.getMovingDirection()
     move_tick = player.getMoveTick()
-    correction_term = move_tick / MAX_MOVE_TICKS * PLAYER_VIEW_SIZE
+    if direction is not None:
+        MAX_MOVE_TICKS = eval(f'MAX_MOVE_TICKS_{direction.upper()}')
+        correction_term = move_tick / MAX_MOVE_TICKS * PLAYER_VIEW_SIZE
+    else:
+        correction_term = 0
 
     bg_x = -(start_col + HALF) * PLAYER_VIEW_SIZE
     bg_y = -(start_row + HALF) * PLAYER_VIEW_SIZE
@@ -64,7 +68,7 @@ def display(screen, cells, player):
                 cell_y = (row_no - start_row) * PLAYER_VIEW_SIZE
                 cell_x = (col_no - start_col) * PLAYER_VIEW_SIZE
 
-                # adjust correction based on player.move_tick and player.moving_direction
+                # adjust correction based on correction term
                 if direction == "right":
                     cell_x -= correction_term
                 elif direction == "left":
@@ -75,7 +79,7 @@ def display(screen, cells, player):
                     cell_y -= correction_term
                 
                 # draw the cell
-                pygame.draw.rect(screen, fill_color, (cell_x, cell_y, PLAYER_VIEW_SIZE, PLAYER_VIEW_SIZE))
+                pygame.draw.rect(screen, MUD_COLOR, (cell_x, cell_y, PLAYER_VIEW_SIZE, PLAYER_VIEW_SIZE))
 
                 # draw walls
                 if cell.up:
@@ -97,11 +101,7 @@ def display(screen, cells, player):
     gap = (PLAYER_VIEW_SIZE - PLAYER_SIZE) // 2
     rect = (cell_x + gap, cell_y + gap, PLAYER_SIZE, PLAYER_SIZE)
 
-    # if player is facing left, display flipped image
-    img = player.image
-    if player.getFacingDirection() == "left":
-        img = pygame.transform.flip(img, True, False)
-    screen.blit(img, rect)
+    screen.blit(player.image, rect)
                 
     pygame.display.update()
 

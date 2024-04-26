@@ -1,12 +1,13 @@
 from constants import *
 import pygame
 
-def getImgFromMoveTick(move_tick):
+def getImgFromMoveTick(move_tick, direction):
     cum_sum = 0
-    for img_index in range(1,8):
-        cum_sum += IMG_TICK_DICT[img_index]
+    IMG_TICK_DICT = eval(f'IMG_TICK_DICT_{direction.upper()}')
+    for img_key in sorted(IMG_TICK_DICT.keys()):
+        cum_sum += IMG_TICK_DICT[img_key]
         if move_tick < cum_sum:
-            return img_index
+            return img_key
 
 class Player:
     def __init__(self, start_row=0, start_col=0, end_row=N_CELLS-1, end_col=N_CELLS-1):
@@ -15,15 +16,7 @@ class Player:
         self.end_row = end_row
         self.end_col = end_col
 
-        # load images
-        self.imgs = []
-
-        for i in range(8):
-            img = pygame.image.load(f'imgs/{str(i)}.png')
-            img = pygame.transform.scale(img, (PLAYER_SIZE, PLAYER_SIZE))
-            self.imgs.append(img)
-        
-        self.image = self.imgs[0]
+        self.image = RIGHT_IMGS[0]
 
         self.moving = False
         self.moving_direction = None
@@ -33,7 +26,8 @@ class Player:
 
     def update(self):
         if self.moving:
-            if self.move_tick == MAX_MOVE_TICKS:
+            max_move_ticks = eval(f'MAX_MOVE_TICKS_{self.moving_direction.upper()}')
+            if self.move_tick == max_move_ticks:
                 # animation ends here, based on moving_direction update the coords of the player in the maze
                 if self.moving_direction == "right":
                     self.col += 1
@@ -47,14 +41,34 @@ class Player:
                 self.moving = False
                 self.moving_direction = None
                 self.move_tick = 0
-                self.image = self.imgs[0]
+                if self.facing == "right":
+                    self.image = RIGHT_IMGS[0]
+                elif self.facing == "left":
+                    self.image = LEFT_IMGS[0]
                 return
             
             # animation in progress, set image and increase move_tick
-            self.image = self.imgs[getImgFromMoveTick(self.move_tick)]
+            if self.moving_direction == "right":
+                image_list = RIGHT_IMGS
+            elif self.moving_direction == "left":
+                image_list = LEFT_IMGS
+            elif self.moving_direction == "up":
+                image_list = UP_IMGS
+            elif self.moving_direction == "down":
+                image_list = DOWN_IMGS
+
+            self.image = image_list[getImgFromMoveTick(self.move_tick, self.moving_direction)]
+
+            if self.facing == "left" and self.moving_direction != "left": # facing left but moving up or down
+                img = pygame.transform.flip(self.image, flip_x=True, flip_y=False)
+                self.image = img
+
             self.move_tick += 1
         else:
-            self.image = self.imgs[0]
+            if self.facing == "right":
+                self.image = RIGHT_IMGS[0]
+            elif self.facing == "left":
+                self.image = LEFT_IMGS[0]
 
     def isMoving(self):
         return self.moving
