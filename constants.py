@@ -17,6 +17,9 @@ PLAYER_SIZE = PLAYER_VIEW_SIZE - WALL_THICKNESS
 HALF = (PLAYER_VIEW_CELLS - 1) // 2
 BG_SIZE = (N_CELLS + 2 * HALF) * PLAYER_SIZE
 
+OPENING_IMAGE = pygame.image.load('imgs/opening_screen.png')
+OPENING_IMAGE = pygame.transform.scale(OPENING_IMAGE, (WIDTH, HEIGHT))
+
 RIGHT_IMGS = {}
 
 for i in range(8):
@@ -37,6 +40,11 @@ for i in range(5):
 DOWN_IMGS = {}
 for i in range(4, 8):
     DOWN_IMGS[i] = RIGHT_IMGS[i]
+
+BG_IMAGE = pygame.image.load('imgs/possible_background.jpg')
+BG_IMAGE = pygame.transform.scale(BG_IMAGE, ((N_CELLS + 2*HALF) * PLAYER_VIEW_SIZE,) * 2)
+CELL_IMAGE = pygame.image.load('imgs/tile.png')
+CELL_IMAGE = pygame.transform.scale(CELL_IMAGE, (PLAYER_VIEW_SIZE, PLAYER_VIEW_SIZE))
 
 IMG_TICK_DICT_RIGHT = {
     1:1,
@@ -76,3 +84,5 @@ MAX_MOVE_TICKS_RIGHT = sum(IMG_TICK_DICT_RIGHT.values())
 MAX_MOVE_TICKS_LEFT = sum(IMG_TICK_DICT_LEFT.values())
 MAX_MOVE_TICKS_UP = sum(IMG_TICK_DICT_UP.values())
 MAX_MOVE_TICKS_DOWN = sum(IMG_TICK_DICT_DOWN.values())
+
+MAX_TIME_ALLOWED = {"Easy": 60, "Medium": 100, "Hard": 150}
