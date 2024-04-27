@@ -47,37 +47,37 @@ CELL_IMAGE = pygame.image.load('imgs/tile.png')
 CELL_IMAGE = pygame.transform.scale(CELL_IMAGE, (PLAYER_VIEW_SIZE, PLAYER_VIEW_SIZE))
 
 IMG_TICK_DICT_RIGHT = {
-    1:1,
-    2:1,
-    3:2,
-    4:3,
-    5:2,
-    6:1,
-    7:1
+    1:2,
+    2:2,
+    3:4,
+    4:6,
+    5:4,
+    6:2,
+    7:2
 }
 
 IMG_TICK_DICT_LEFT = {
-    1:1,
-    2:1,
-    3:2,
-    4:3,
-    5:2,
-    6:1,
-    7:1
+    1:2,
+    2:2,
+    3:4,
+    4:6,
+    5:4,
+    6:2,
+    7:2
 }
 
 IMG_TICK_DICT_UP = {
-    1:2,
-    2:4,
-    3:4,
-    4:4
+    1:4,
+    2:8,
+    3:8,
+    4:8
 }
 
 IMG_TICK_DICT_DOWN = {
-    4:2,
-    5:4,
-    6:4,
-    7:4
+    4:4,
+    5:8,
+    6:8,
+    7:8
 }
 
 MAX_MOVE_TICKS_RIGHT = sum(IMG_TICK_DICT_RIGHT.values())

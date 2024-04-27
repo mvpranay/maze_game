@@ -58,7 +58,7 @@ class Game:
                         self.try_moving_left()
                     elif event.key == pygame.K_RIGHT:
                         self.try_moving_right()
-            
+                        
             self.update_time()
 
             if self.completed_maze():
@@ -66,10 +66,10 @@ class Game:
             
             if not self.check_time():
                 return False
-
+                        
             self.player.update()
             self.display(screen)
-        
+    
     def update_time(self):
         self.time_elapsed = (pygame.time.get_ticks() - self.time_offset) // 1000
 
@@ -181,5 +181,17 @@ class Game:
 
         screen.blit(self.player.image, rect)
                     
-        pygame.display.update()
+        # display time left
+        # (MAX - t)/MAX * GREEN + t/MAX*RED
+        # F1 * GREEN + F2 * RED
+        F1 = (self.MAX_TIME - self.time_elapsed) / self.MAX_TIME
+        F2 = self.time_elapsed / self.MAX_TIME
+        green_comp = (0, F1 * 255, 0)
+        red_comp = (F2 * 255, 0, 0)
+        color = tuple(map(sum, zip(green_comp, red_comp)))
+        font = pygame.font.Font(None, 60)
+        text = font.render(f"Time left: {self.MAX_TIME - self.time_elapsed}", True, color)
+        text_rect = text.get_rect(topright=(WIDTH - 10, 10))
+        screen.blit(text, text_rect)
 
+        pygame.display.update()
