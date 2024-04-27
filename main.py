@@ -128,10 +128,10 @@ def run_game(level_clicked):
     if level_clicked == "Easy":
         cells = binary_tree(N_CELLS)
     elif level_clicked == "Medium":
-        cells = generate_maze(N_CELLS)
-    elif level_clicked == "Hard":
         cells = prims(N_CELLS)
-
+    elif level_clicked == "Hard":
+        cells = generate_maze(N_CELLS)
+        
     player = Player()
 
     run = True
@@ -163,7 +163,8 @@ def run_game(level_clicked):
 if __name__ == "__main__":
     opening_screen(screen)
 
-    while True:
+    CONTINUE = True
+    while CONTINUE:
         # main menu
         level_clicked = main_menu(screen)
 
@@ -171,4 +172,4 @@ if __name__ == "__main__":
         run_game(level_clicked)
 
         # end screen
-        end_screen(screen)
+        CONTINUE = end_screen(screen)

@@ -6,7 +6,7 @@ def main_menu(screen):
     while run:
         screen.fill(BLACK)
         title_font = pygame.font.Font(None, 80)
-        title_text = title_font.render("Rabbit Puzzle", True, (255, 0, 0))  
+        title_text = title_font.render("Rabbit Puzzle", True, (255, 255, 255))  
         title_rect = title_text.get_rect(center=(WIDTH // 2, HEIGHT // 4))
         screen.blit(title_text, title_rect)
 
@@ -15,10 +15,10 @@ def main_menu(screen):
         easy_text = level_font.render("Easy", True, (0, 255, 0))
         easy_rect = easy_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
 
-        medium_text = level_font.render("Medium", True, (0, 0, 255))
+        medium_text = level_font.render("Medium", True, (255, 165, 0))
         medium_rect = medium_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 70))
 
-        hard_text = level_font.render("Hard", True, (255, 255, 0))
+        hard_text = level_font.render("Hard", True, (255, 0, 0))
         hard_rect = hard_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 140))
         
         mouse_pos = pygame.mouse.get_pos()
