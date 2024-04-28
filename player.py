@@ -45,7 +45,8 @@ class Player:
                     self.image = RIGHT_IMGS[0]
                 elif self.facing == "left":
                     self.image = LEFT_IMGS[0]
-                return
+                    
+                return True # player has moved successfully
             
             # animation in progress, set image and increase move_tick
             if self.moving_direction == "right":
@@ -69,6 +70,7 @@ class Player:
                 self.image = RIGHT_IMGS[0]
             elif self.facing == "left":
                 self.image = LEFT_IMGS[0]
+        return False
 
     def isMoving(self):
         return self.moving
