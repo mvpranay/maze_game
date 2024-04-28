@@ -36,6 +36,9 @@ class Game:
 
         self.total_paused = 0
         self.pause_start = None
+
+        self.starving = False
+        self.starve_tick = 0
         
     def spawn_carrot(self):
         while True:
@@ -75,12 +78,25 @@ class Game:
                 self.energy_tick = 0
                 if self.energy > 0:
                     self.energy -= 1
+            
+            if self.starving:
+                self.starve_tick += 1
+
+        if self.energy == 0:
+            self.starving = True
+        else:
+            self.starving = False
+            self.starve_tick = 0
+
         if self.check_carrot(self.player.row, self.player.col):
             self.remove_carrot(self.player.row, self.player.col)
             if self.energy < MAX_ENERGY:
                 self.energy += 1
                 self.spawn_carrot()
         
+    def check_starving(self):
+        return self.starving and self.starve_tick == MAX_STARVE_TICKS
+    
     def run(self, screen):
         self.obtain_time_offset()
         run = True
@@ -90,7 +106,8 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    pygame.quit()
+                    exit(0)
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
@@ -110,10 +127,14 @@ class Game:
                         self.total_paused += pygame.time.get_ticks() - self.pause_start
                         
             if self.completed_maze():
-                return True
+                return "success"
             
             if not self.check_time():
-                return False
+                return "time_out"
+            
+            # check starving
+            if self.check_starving():
+                return "starved"
                       
             self.update()
     
@@ -250,8 +271,8 @@ class Game:
         # display time left
         # (MAX - t)/MAX * GREEN + t/MAX*RED
         # F1 * GREEN + F2 * RED
-        F1 = (self.MAX_TIME - self.time_elapsed) / self.MAX_TIME
-        F2 = self.time_elapsed / self.MAX_TIME
+        F1 = (self.MAX_TIME + 1 - self.time_elapsed) / (self.MAX_TIME + 1)
+        F2 = self.time_elapsed / (self.MAX_TIME + 1)
         green_comp = (0, F1 * 255, 0)
         red_comp = (F2 * 255, 0, 0)
         color = tuple(map(sum, zip(green_comp, red_comp)))
@@ -259,7 +280,7 @@ class Game:
         text = font.render(f"Time left: {self.MAX_TIME - self.time_elapsed}", True, color)
         text_rect = text.get_rect(topright=(WIDTH - 10, 10))
         screen.blit(text, text_rect)
-
+        
         # display pause button 
         pause_text = font.render("Pause", True, (255, 255, 255))
         pause_rect = pause_text.get_rect(topleft=(10, 10))
@@ -288,8 +309,8 @@ class Game:
             screen.blit(resume_text, resume_rect)
 
             # Display time remaining
-            F1 = (self.MAX_TIME - self.time_elapsed) / self.MAX_TIME
-            F2 = self.time_elapsed / self.MAX_TIME
+            F1 = (self.MAX_TIME + 1 - self.time_elapsed) / (self.MAX_TIME + 1)
+            F2 = self.time_elapsed / (self.MAX_TIME + 1)
             green_comp = (0, F1 * 255, 0)
             red_comp = (F2 * 255, 0, 0)
             color = tuple(map(sum, zip(green_comp, red_comp)))

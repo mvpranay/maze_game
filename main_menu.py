@@ -23,13 +23,13 @@ def main_menu(screen):
         
         mouse_pos = pygame.mouse.get_pos()
         if easy_rect.collidepoint(mouse_pos):
-            easy_text = level_font.render("Easy", True, (255, 255, 255))  # White color
+            easy_text = level_font.render("Easy", True, (0, 128, 0))
 
         if medium_rect.collidepoint(mouse_pos):
-            medium_text = level_font.render("Medium", True, (255, 255, 255))  # White color
+            medium_text = level_font.render("Medium", True, (128, 82, 0))
 
         if hard_rect.collidepoint(mouse_pos):
-            hard_text = level_font.render("Hard", True, (255, 255, 255))  # White color
+            hard_text = level_font.render("Hard", True, (128, 0, 0))
 
         screen.blit(easy_text, easy_rect)
         screen.blit(medium_text, medium_rect)

@@ -1,9 +1,6 @@
 import pygame
-from maze import generate_maze
-from binary_tree import binary_tree
-from prims import prims
 from main_menu import main_menu
-from end_screen import end_screen
+from end_screen import success, starved, time_out
 from player import Player
 from game import Game
 from constants import *
@@ -43,4 +40,10 @@ if __name__ == "__main__":
         result = game.run(screen)
 
         # end screen
-        CONTINUE = end_screen(screen)
+        if result == "success":
+            CONTINUE = success(screen)
+        elif result == "starved":
+            CONTINUE = starved(screen)
+        elif result == "time_out":
+            CONTINUE = time_out(screen)
+

@@ -100,3 +100,5 @@ MAX_TIME_ALLOWED = {"Easy": 60, "Medium": 100, "Hard": 150}
 N_CARROTS = {"Easy": 10, "Medium": 15, "Hard": 20}
 MAX_ENERGY = 10 
 MAX_ENERGY_TICKS = 8
+
+MAX_STARVE_TICKS = 10
