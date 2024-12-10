@@ -1,15 +1,14 @@
 import pygame
-WIDTH = 900
-HEIGHT = 900
+WIDTH = 600
+HEIGHT = 600
 N_CELLS = 20
-FPS = 40
+MIN_FPS = 20
+MAX_FPS = 80
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-MUD_COLOR = (109, 58, 31)#(139, 69, 19)
-STONE_COLOR = (158, 158, 158)
-WALL_THICKNESS = 20
+WALL_THICKNESS = 13
 
 PLAYER_VIEW_CELLS = 9
 PLAYER_VIEW_SIZE = WIDTH // PLAYER_VIEW_CELLS
@@ -52,7 +51,7 @@ CARROT = pygame.transform.scale(CARROT, (PLAYER_SIZE, PLAYER_SIZE))
 GOLDEN_CARROT = pygame.image.load('imgs/golden_carrot.png')
 GOLDEN_CARROT = pygame.transform.scale(GOLDEN_CARROT, (PLAYER_SIZE, PLAYER_SIZE))
 
-FOOD_SIZE = 40
+FOOD_SIZE = 30
 FOOD = pygame.image.load('imgs/food.png')
 FOOD = pygame.transform.scale(FOOD, (FOOD_SIZE, FOOD_SIZE))
 
@@ -99,6 +98,12 @@ MAX_TIME_ALLOWED = {"Easy": 60, "Medium": 100, "Hard": 150}
 
 N_CARROTS = {"Easy": 10, "Medium": 15, "Hard": 20}
 MAX_ENERGY = 10 
-MAX_ENERGY_TICKS = 8
+MAX_ENERGY_TICKS = 7
 
 MAX_STARVE_TICKS = 10
+
+pygame.mixer.init()
+BG_MUSIC = pygame.mixer.Sound('audio/bg-music.wav')
+JUMP_MUSIC = pygame.mixer.Sound('audio/jump-music.wav')
+EATING_MUSIC = pygame.mixer.Sound('audio/eating-music.wav')
+CELEBRATION_MUSIC = pygame.mixer.Sound('audio/yay-music.wav')

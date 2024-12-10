@@ -3,6 +3,7 @@ from constants import *
 
 def main_menu(screen):
     run = True
+    level_selected = None
     while run:
         screen.fill(BLACK)
         title_font = pygame.font.Font(None, 80)
@@ -20,16 +21,17 @@ def main_menu(screen):
 
         hard_text = level_font.render("Hard", True, (255, 0, 0))
         hard_rect = hard_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 140))
+
+        start_text = level_font.render("Press Enter to Start", True, (255, 255, 255))
+        start_rect = start_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 210))
+        screen.blit(start_text, start_rect)
         
-        mouse_pos = pygame.mouse.get_pos()
-        if easy_rect.collidepoint(mouse_pos):
-            easy_text = level_font.render("Easy", True, (0, 128, 0))
-
-        if medium_rect.collidepoint(mouse_pos):
-            medium_text = level_font.render("Medium", True, (128, 82, 0))
-
-        if hard_rect.collidepoint(mouse_pos):
-            hard_text = level_font.render("Hard", True, (128, 0, 0))
+        if level_selected == "Easy":
+            pygame.draw.rect(screen, (0, 255, 0), easy_rect, 1)
+        elif level_selected == "Medium":
+            pygame.draw.rect(screen, (255, 165, 0), medium_rect, 1)
+        elif level_selected == "Hard":
+            pygame.draw.rect(screen, (255, 0, 0), hard_rect, 1)
 
         screen.blit(easy_text, easy_rect)
         screen.blit(medium_text, medium_rect)
@@ -42,14 +44,18 @@ def main_menu(screen):
                 pygame.quit()
                 exit(0)
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
 
                 if easy_rect.collidepoint(mouse_pos):
-                    return "Easy"
+                    level_selected = "Easy"
                 elif medium_rect.collidepoint(mouse_pos):
-                    return "Medium"
+                    level_selected = "Medium"
                 elif hard_rect.collidepoint(mouse_pos):
-                    return "Hard"
+                    level_selected = "Hard"
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN and level_selected is not None:
+                    run = False
     
-    return None
+    return level_selected

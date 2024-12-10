@@ -88,19 +88,23 @@ class Player:
         self.facing = "right"
         self.moving = True
         self.moving_direction = "right"
+        JUMP_MUSIC.play()
 
     def move_left(self):
         self.facing = "left"
         self.moving = True
         self.moving_direction = "left"
+        JUMP_MUSIC.play()
 
     def move_up(self):
         self.moving = True
         self.moving_direction = "up"
-    
+        JUMP_MUSIC.play()
+
     def move_down(self):
         self.moving = True
         self.moving_direction = "down"
+        JUMP_MUSIC.play()
 
     def completed_maze(self):
         return self.row == self.end_row and self.col == self.end_col
